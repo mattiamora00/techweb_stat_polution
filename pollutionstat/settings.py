@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-dw3z7dq=gx@1-8#z$h9^v7hh!izg26djyu3+e=p#+@xel7kqjy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Django-Tenants Settings
 TENANT_MODEL = "tenant.Tenant"
@@ -100,9 +100,6 @@ INSTALLED_APPS = [
 """
 GRAPHENE = {
     'SCHEMA': 'pollutionstat.schemas.schemas',
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
 }
 
 MIDDLEWARE = [
@@ -153,6 +150,9 @@ DATABASES = {
         'PORT': '5432',
     },
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 DATABASE_ROUTERS = (
     'django_tenants.routers.TenantSyncRouter',
