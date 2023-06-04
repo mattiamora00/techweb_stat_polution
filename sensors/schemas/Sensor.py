@@ -14,7 +14,7 @@ class SensorType(DjangoObjectType):
         model = Sensor
         fields = "__all__"
         filter_fields = [
-            "id","sensor_code","lat","lng","date_change_filter","oxidation_level"
+            "id","sensor_code","lat","lng","date_change_filter","oxidation_level","sensor_model"
         ]
         interfaces = (relay.Node,)
 

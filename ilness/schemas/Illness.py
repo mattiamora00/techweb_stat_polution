@@ -15,7 +15,7 @@ class IlnessType(DjangoObjectType):
         model = Illness
         fields = "__all__"
         filter_fields = [
-            "id"
+            "id","nome","mortality_index","average_duration_days"
         ]
         interfaces = (relay.Node,)
 

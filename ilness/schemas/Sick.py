@@ -15,7 +15,7 @@ class SickType(DjangoObjectType):
         model = Sick
         fields = "__all__"
         filter_fields = [
-            "id"
+            "id","fiscal_code","name","surname","gender",
         ]
         interfaces = (relay.Node,)
 
