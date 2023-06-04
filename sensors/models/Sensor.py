@@ -9,7 +9,8 @@ class Sensor(models.Model):
     pollutant = models.ForeignKey("pollutants.Pollutant", on_delete=models.CASCADE)
     date_change_filter = models.DateField(blank=True,null=True)
     oxidation_level = models.FloatField(blank=True,null=True)
-    models = models.CharField(max_length=30),
+    sensor_model=models.CharField(max_length=30)
+    #models = models.CharField(max_length=30),
 
     def __str__(self):
         return f"{self.sensor_code} {self.city.name} {self.pollutant.name} {self.models}"

@@ -1,7 +1,8 @@
 from django.db import models
 
+
 class Cause(models.Model):
-    illness=models.ForeignKey("Illness",on_delete=models.CASCADE)
+    illness = models.ForeignKey("Illness", on_delete=models.CASCADE)
     pollution_type = models.ForeignKey("pollutants.PollutionType", on_delete=models.CASCADE)
 
     def __str__(self):

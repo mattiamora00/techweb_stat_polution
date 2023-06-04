@@ -8,11 +8,12 @@ class Sick(models.Model):
         ("F","Female"),
     ]
 
-    fiscal_code=models.CharField(max_length=16, validators=[MinLengthValidator(16)],unique=True),
-    name=models.CharField(max_length=30),
-    surname=models.CharField(max_length=30),
-    gender=models.TextField(choices=gender_choices,blank=True,null=True),
+    fiscal_code=models.CharField(max_length=16, validators=[MinLengthValidator(16)],unique=True)
+    name=models.CharField(max_length=30)
+    surname=models.CharField(max_length=30)
+    gender=models.TextField(choices=gender_choices,blank=True,null=True)
     population=models.ForeignKey('geo.City', on_delete=models.CASCADE)
+    note=models.TextField(blank=True,null=True)
 
     def __str__(self):
         return f"{self.name} {self.fiscal_code}"

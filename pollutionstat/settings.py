@@ -48,9 +48,9 @@ TENANT_TYPES = {
              'django_filters',
              'graphene_django',
              'tenant',
+             'ilness',
              'geo',
              'plans',
-             'ilness',
              'pollutants',
              'pollutionstat'
              # sharecd apps here
