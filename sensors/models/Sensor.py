@@ -10,8 +10,8 @@ class Sensor(models.Model):
     date_change_filter = models.DateField(blank=True,null=True)
     oxidation_level = models.FloatField(blank=True,null=True)
     sensor_model=models.CharField(max_length=30)
-    #models = models.CharField(max_length=30),
+
 
     def __str__(self):
-        return f"{self.sensor_code} {self.city.name} {self.pollutant.name} {self.models}"
+        return f"{self.sensor_code} {self.city.name} {self.pollutant.name} {self.sensor_model}"
 
