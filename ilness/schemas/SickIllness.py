@@ -26,13 +26,19 @@ class SickIlnessMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    sicks_ilnesses = DjangoFilterConnectionField(SickIlnessType)
+    sicks_ilnesses =  graphene.List(SickIlnessType,id=graphene.ID(required=True))
     sick_ilness = graphene.Field(SickIlnessType, id=graphene.Int())
 
+    @staticmethod
     def resolve_sicks_ilnesses(self, info, **kwargs):
-        return SickIllness.objects.all()
+        filters = {}
+        for key, value in kwargs.items():
+            filters[key] = value
+        result = SickIllness.objects.filter(**filters)
+        return result
 
-    def resolve_sick_ilness(self, info, id):
+
+def resolve_sick_ilness(self, info, id):
         return SickIllness.objects.get(pk=id)
 
 

@@ -26,11 +26,16 @@ class CauseMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    causes = DjangoFilterConnectionField(CauseType)
+    causes = graphene.List(CauseType,id=graphene.ID(required=True))
     cause = graphene.Field(CauseType, id=graphene.Int())
 
-    def resolve_causes(self, info, **kwargs):
-        return Cause.objects.all()
+    @staticmethod
+    def resolve_states(self, info, **kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+            filters[key] = value
+        result = Cause.objects.filter(**filters)
+        return result
 
     def resolve_cause(self, info, id):
         return Cause.objects.get(pk=id)

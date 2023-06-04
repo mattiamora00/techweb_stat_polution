@@ -26,8 +26,16 @@ class SickMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    sicks = DjangoFilterConnectionField(SickType)
+    sicks = graphene.List(SickType,id=graphene.ID(),fiscal_code=graphene.String(),surname=graphene.String(),gender=graphene.String())
     sick = graphene.Field(SickType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_states(self, info, **kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+            filters[key] = value
+        result = Sick.objects.filter(**filters)
+        return result
 
     def resolve_sick(self, info, id):
         return Sick.objects.get(pk=id)

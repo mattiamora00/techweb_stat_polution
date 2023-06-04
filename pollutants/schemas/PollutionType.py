@@ -25,8 +25,16 @@ class PollutionTypeMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    pollutants_types = DjangoFilterConnectionField(PollutionTypeType)
+    pollutants_types = graphene.List(PollutionTypeType,name=graphene.String())
     pollutant_type = graphene.Field(PollutionTypeType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_pollutants_types(self, info, **kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+            filters[key] = value
+        result = PollutionType.objects.filter(**filters)
+        return result
 
     def resolve_pollutant(self, info, id):
         return PollutionType.objects.get(pk=id)

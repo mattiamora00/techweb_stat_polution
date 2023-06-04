@@ -25,8 +25,16 @@ class StateMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    states = DjangoFilterConnectionField(StateType)
+    states = graphene.List(StateType,iso_code=graphene.String(),name=graphene.String())
     state = graphene.Field(StateType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_states(self,info,**kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+                filters[key] = value
+        result=State.objects.filter(**filters)
+        return result
 
     def resolve_state(self, info, id):
         return State.objects.get(pk=id)

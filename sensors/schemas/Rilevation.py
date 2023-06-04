@@ -25,8 +25,16 @@ class RilevationMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    rilevations = DjangoFilterConnectionField(RilevationType)
+    rilevations = graphene.List(RilevationType,timestamp=graphene.DateTime(),quantity=graphene.Float())
     rilevation = graphene.Field(RilevationType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_rilevations(self,info,**kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+                filters[key] = value
+        result=Rilevation.objects.filter(**filters)
+        return result
 
     def resolve_rilevation(self, info, id):
         return Rilevation.objects.get(pk=id)

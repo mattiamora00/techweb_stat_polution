@@ -26,10 +26,18 @@ class IlnessMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    ilnesses = DjangoFilterConnectionField(IlnessType)
-    ilnee = graphene.Field(IlnessType, id=graphene.Int())
+    ilnesses = graphene.List(IlnessType,id=graphene.ID(),nome=graphene.String(),mortality_index=graphene.Int(),average_duration_days=graphene.Int())
+    ilnes = graphene.Field(IlnessType, id=graphene.Int())
 
-    def resolve_ilnee(self, info, id):
+    @staticmethod
+    def resolve_states(self, info, **kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+            filters[key] = value
+        result = Illness.objects.filter(**filters)
+        return result
+
+    def resolve_ilnes(self, info, id):
         return Illness.objects.get(pk=id)
 
 

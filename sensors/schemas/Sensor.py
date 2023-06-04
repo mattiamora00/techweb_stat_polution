@@ -25,8 +25,17 @@ class SensorMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    sensors = DjangoFilterConnectionField(SensorType)
+    sensors = graphene.List(SensorType,lat=graphene.Float(),lng=graphene.Float(),date_change_filter=graphene.Date(),oxidation_level=graphene.Float(),sensor_model=graphene.String())
     sensor = graphene.Field(SensorType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_sensors(self,info,**kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+                filters[key] = value
+        result=Sensor.objects.filter(**filters)
+        return result
+
 
     def resolve_sensor(self, info, id):
         return Sensor.objects.get(pk=id)

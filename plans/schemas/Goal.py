@@ -14,7 +14,7 @@ class GoalType(DjangoObjectType):
         model = Goal
         fields = "__all__"
         filter_fields = [
-            "id"
+            "id","current_quantity","goal_threshold"
         ]
         interfaces = (relay.Node,)
 
@@ -25,8 +25,16 @@ class GoalMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    goals = DjangoFilterConnectionField(GoalType)
+    goals = graphene.List(GoalType,id=graphene.ID(),current_quantity=graphene.Float(),goal_threshold=graphene.Float())
     goal = graphene.Field(GoalType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_goals(self, info, **kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+            filters[key] = value
+        result = Goal.objects.filter(**filters)
+        return result
 
     def resolve_goal(self, info, id):
         return Goal.objects.get(pk=id)

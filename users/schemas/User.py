@@ -25,8 +25,16 @@ class UserMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    users = DjangoFilterConnectionField(UserType)
+    users = graphene.List(UserType,username=graphene.String(),email=graphene.String())
     user = graphene.Field(UserType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_users(self,info,**kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+                filters[key] = value
+        result=User.objects.filter(**filters)
+        return result
 
     def resolve_user(self, info, id):
         return User.objects.get(pk=id)

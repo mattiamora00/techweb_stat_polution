@@ -14,7 +14,7 @@ class PlanType(DjangoObjectType):
         model = Plan
         fields = "__all__"
         filter_fields = {
-            "id","name","city","description","start_date","end_date","success"
+            "id","name","description","start_date","end_date","success"
         }
         interfaces = (relay.Node,)
 
@@ -25,8 +25,16 @@ class PlanMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    plans = DjangoFilterConnectionField(PlanType)
+    plans = graphene.List(PlanType,id=graphene.ID(),name=graphene.String(),start_date=graphene.Date(),end_date=graphene.Date(),success=graphene.Boolean())
     plan = graphene.Field(PlanType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_plans(self, info, **kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+            filters[key] = value
+        result = Plan.objects.filter(**filters)
+        return result
 
     def resolve_plan(self, info, id):
         return Plan.objects.get(pk=id)

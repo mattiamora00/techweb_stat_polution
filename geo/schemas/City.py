@@ -25,8 +25,16 @@ class CityMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    cities = DjangoFilterConnectionField(CityType)
+    cities = graphene.List(CityType,id=graphene.ID(),name=graphene.String(),lat=graphene.Float(),lng=graphene.Float(),male_percentage=graphene.Int(),female_percentage=graphene.Int())
     city = graphene.Field(CityType, id=graphene.Int())
+
+    @staticmethod
+    def resolve_cities(self,info,**kwargs):
+        filters = {}
+        for key, value in kwargs.items():
+                filters[key] = value
+        result=City.objects.filter(**filters)
+        return result
 
     def resolve_city(self, info, id):
         return City.objects.get(pk=id)
