@@ -30,7 +30,7 @@ class Query(graphene.ObjectType):
     ilnes = graphene.Field(IlnessType, id=graphene.Int())
 
     @staticmethod
-    def resolve_states(self, info, **kwargs):
+    def resolve_ilnesses(self, info, **kwargs):
         filters = {}
         for key, value in kwargs.items():
             filters[key] = value

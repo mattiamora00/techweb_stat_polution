@@ -26,7 +26,7 @@ class SickIlnessMutation(DjangoFormMutation):
 
 
 class Query(graphene.ObjectType):
-    sicks_ilnesses =  graphene.List(SickIlnessType,id=graphene.ID(required=True))
+    sicks_ilnesses = graphene.List(SickIlnessType,id=graphene.ID(required=True))
     sick_ilness = graphene.Field(SickIlnessType, id=graphene.Int())
 
     @staticmethod

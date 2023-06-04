@@ -7,4 +7,4 @@ class Rilevation(models.Model):
     sensor = models.ForeignKey("Sensor", on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.sensor.sensor_code} {self.sensor.city.name} {self.timestamp} {self.quantity}"
+        return f"{self.sensor.sensor_code} {self.sensor.city.name} {self.timestamp} {self.quantity} {self.sensor.pollutant.name}"

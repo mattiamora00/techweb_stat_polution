@@ -30,7 +30,7 @@ class Query(graphene.ObjectType):
     sick = graphene.Field(SickType, id=graphene.Int())
 
     @staticmethod
-    def resolve_states(self, info, **kwargs):
+    def resolve_sicks(self, info, **kwargs):
         filters = {}
         for key, value in kwargs.items():
             filters[key] = value
