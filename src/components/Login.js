@@ -13,10 +13,6 @@ function Login(props) {
     
     const history=useHistory();
     const [loginData,setLoginData]=React.useState({});
-
-    React.useEffect(()=>{
-        console.log(props)
-    },[])
     
     const onChangeTextInput=(event)=>{
         setLoginData({...loginData,[event.target.name]:event.target.value})

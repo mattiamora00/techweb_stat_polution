@@ -22,10 +22,6 @@ function Root(){
 
   const [client,setClient]=React.useState(apolloClient)
   
-  React.useEffect(()=>{
-    console.log(client)
-  },[client])
-  
   return (
     <ApolloProvider client={client}>
       <Routes setClient={setClient}/>
