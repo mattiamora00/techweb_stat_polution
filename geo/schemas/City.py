@@ -26,7 +26,7 @@ class CityMutation(DjangoFormMutation):
 
 class Query(graphene.ObjectType):
     cities = graphene.List(CityType,id=graphene.ID(),name=graphene.String(),lat=graphene.Float(),lng=graphene.Float(),male_percentage=graphene.Int(),female_percentage=graphene.Int())
-    city = graphene.Field(CityType, id=graphene.Int())
+    city = graphene.Field(CityType, id=graphene.Int(),name=graphene.String())
 
     @staticmethod
     def resolve_cities(self,info,**kwargs):
