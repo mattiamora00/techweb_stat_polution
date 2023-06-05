@@ -43,4 +43,31 @@ query city($city:String!){
 }
 `
 
-export {POLLUTANT_OF_CITY,ILLNESS_OF_CITY,PLANS_OF_CITY};
+const CAUSE_OF_ILLNESS=gql`
+query CauseIllness($id:Int!){
+  ilnes(id:$id){
+    nome
+    causeSet{
+      edges{
+        node{
+          id
+          pollutionType{
+            name
+            pollutantSet{
+              edges{
+                node{
+                  id
+                  name
+                  description
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`
+
+export {POLLUTANT_OF_CITY,ILLNESS_OF_CITY,PLANS_OF_CITY,CAUSE_OF_ILLNESS};

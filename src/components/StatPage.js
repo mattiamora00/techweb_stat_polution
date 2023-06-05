@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { AppBar,Toolbar,Typography} from '@mui/material';
-import {Box,Text,Grid, ResponsiveContext,} from "grommet";
+import { Box,Text } from "grommet";
 import { useLocation } from "react-router-dom";
 import LineChartComp from "./LineChar";
 import TabellaMalattie from "./TabellaMalattie";
 import TabellaPiani from "./TabellaPiani";
 import {Card } from '@mui/material';
 import { useLazyQuery } from "@apollo/client";
-import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY,GET_PLANS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
+import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
 import LoadingLayer from "./LoadingLayer";
 
 function StatPageComp(props) {
@@ -50,7 +50,6 @@ function StatPageComp(props) {
     onCompleted: (data) => { 
       const planList=data.city.planSet.edges.map((el)=>el.node);
       if(planList){
-        console.log(planList);
         setElencoPiani(planList);
       }
     },
@@ -83,10 +82,6 @@ function StatPageComp(props) {
       height
     };
   }
-
-  React.useEffect(()=>{
-    console.log(windowDimensions)
-  },[windowDimensions])
 
   return (
       <Box>

@@ -5,7 +5,7 @@ import LayerSensoreComp from "./LayerSensore";
 import {Box} from "grommet";
 import Fab from '@mui/material/Fab';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { useLazyQuery,useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { QUERY_GET_SENSORS,QUERY_GET_CITIES } from "./MapCompGQL";
 
 const MapComponent= () => {
@@ -48,7 +48,6 @@ const MapComponent= () => {
     useEffect(()=>{
       queryGetSensors();
       queryGetCities();
-      //getCity();
     },[])
     
     function getCity() {

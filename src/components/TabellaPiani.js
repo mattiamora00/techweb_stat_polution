@@ -63,10 +63,7 @@ function TabellaPiani(props){
             </Table>
             </TableContainer>
             {
-                showLayerDescrizione?
-                <LayerDescrizione/>
-                :
-                null
+              showLayerDescrizione && <LayerDescrizione/>
             }
     </Card>
     )

@@ -1,30 +1,41 @@
 import React from "react";
 import { Layer,Box,Table,TableHeader,TableRow,TableCell,TableBody ,Text} from "grommet";
 import { useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { CAUSE_OF_ILLNESS } from "./StatPageGQL";
+import LoadingLayer from "./LoadingLayer";
 
 const LayerCause=(props)=>{
 
     const [elencoCause,setElencoCause]=React.useState([]);
+    const [nomeMalattia,setNomeMalattia]=React.useState();
+    const [ queryGetCauseIllness,{loading}
+    ] = useLazyQuery(CAUSE_OF_ILLNESS, { //{variables:{JSON}}
+      fetchPolicy: "no-cache",
+      onCompleted: (data) => { 
+        const causeList=data.ilnes.causeSet.edges.map((el)=>el.node.pollutionType.pollutantSet.edges)[0]
+      
+        if(data.ilnes.nome){
+            setNomeMalattia(data.ilnes.nome);
+        }
+        if(causeList){
+            console.log(causeList);
+            setElencoCause(causeList);
+        }
+      },
+      notifyOnNetworkStatusChange: true, // did the work
+    });
 
-    useEffect(()=>{
-        getCause();
+    React.useEffect(()=>{
+        if(props.malattia){
+            queryGetCauseIllness({variables:{id:props.malattia}})
+        }
     },[])
-
-    
-    function getCause() {
-        fetch(`https://pollutionstat.com/server/getCausa/`+props.malattia)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            setElencoCause(JSON.parse(data));
-          });
-      }
 
     return(
         <Layer onEsc={props.onEscLayer} onClickOutside={props.onEscLayer}>
-            <Box width="50vw" pad="medium" gap="medium" overflow="auto"> 
-                <Text>Cause {props.malattia}</Text>
+            <Box width="80vw" pad="medium" gap="medium" overflow="auto"> 
+                <Text weight="bold">Cause {nomeMalattia}</Text>
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -45,13 +56,13 @@ const LayerCause=(props)=>{
                             return(
                                 <TableRow>
                                     <TableCell scope="row">
-                                        {causa.nome_tipo}
+                                        {""}
                                     </TableCell>
                                     <TableCell scope="row">
-                                        {causa.nome}
+                                        {causa.node.name}
                                     </TableCell>
                                     <TableCell scope="row">
-                                        {causa.descrizione}
+                                        {causa.node.description}
                                     </TableCell>
                                 </TableRow> 
                             )
@@ -60,6 +71,9 @@ const LayerCause=(props)=>{
                     </TableBody>
                 </Table>
             </Box>
+            {
+                loading && <LoadingLayer/>
+            }
         </Layer>
     )
 }
