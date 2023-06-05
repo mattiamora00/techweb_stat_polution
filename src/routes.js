@@ -3,10 +3,10 @@ import StatPageComp from './components/StatPage';
 import HomeComp from './components/Home';
 import Login from './components/Login';
 
-const Routes = () => (
+const Routes = (props) => (
     <BrowserRouter>
          <Switch>
-            <Route exact path="/" component={Login} />
+            <Route exact path="/"  render={() => <Login  setClient={props.setClient} />}/>
             <Route exact path="/home" component={HomeComp} />
             <Route exact path="/statPage" component={StatPageComp} />
          </Switch>

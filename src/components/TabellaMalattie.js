@@ -19,7 +19,7 @@ function TabellaMalattie(props){
     return(
         <Card elevation="5">
                 <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table sx={{ minWidth: 650 }}aria-label="simple table">
                 <TableHead>
                 <TableRow>
                     <TableCell>Malattia</TableCell>

@@ -4,10 +4,10 @@ import {Card,CardContent,Divider } from '@mui/material';
 function LineChartComp(props){
 
     const data = {
-        labels: props.data.map((ril)=>ril.split('-')[1].split('GMT')[0]),
+        labels: props.data.map((ril)=>ril.timestamp),
         datasets: [{
           label: props.agente,
-          data: props.data.map((ril)=>Number(ril.split('-')[0])),
+          data: props.data.map((ril)=>ril.quantity),
           fill: false,
           borderColor: 'rgb(75, 192, 192)',
           tension: 0.1

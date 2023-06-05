@@ -10,27 +10,8 @@ function HomeComp() {
   const location=useLocation();
   const [client]=React.useState(location.client)
 
-  const apolloClient = new ApolloClient({
-    link: new HttpLink({
-        uri:"http://localhost:8000/graphql/",
-        options: {
-          reconnect: true,
-          connectionParams: {
-            headers: {
-              ["Access-Control-Allow-Origin"]: "*",
-              ["Access-Control-Allow-Headers"]: "Access-Control-Allow-Headers",
-              ["Access-Control-Allow-Methods"]: "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-            }
-          }
-        },
-        includeExtensions: true,
-        includeUnusedVariables: true
-      }),
-    cache:new InMemoryCache(),
-  });
-
   return (
-    <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={client}>
       <Box height="100vh">
         <AppBar position="static">
           <Toolbar variant="dense">

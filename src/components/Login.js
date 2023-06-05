@@ -9,27 +9,32 @@ import LoginIcon from '@mui/icons-material/Login';
 import { useHistory } from "react-router-dom";
 import { ApolloProvider,ApolloClient,InMemoryCache,HttpLink} from '@apollo/client';
 
-function Login() {
+function Login(props) {
     
     const history=useHistory();
     const [loginData,setLoginData]=React.useState({});
 
+    React.useEffect(()=>{
+        console.log(props)
+    },[])
+    
     const onChangeTextInput=(event)=>{
         setLoginData({...loginData,[event.target.name]:event.target.value})
     }
 
     function login(){
         const tenant="milano"
-        const apolloClient=new ApolloClient({
-            uri: 'http://milano.localhost:8000/graphql',
-            cache: new InMemoryCache(),
-          });
-
+        if(props.setClient){
+            const apolloClient=new ApolloClient({
+                uri: `http://${tenant}.localhost:8000/graphql/`,
+                cache: new InMemoryCache(),
+            });
+            props.setClient(apolloClient)
+        }
         history.push(
             {
                 pathname: '/home',
                 tenant: tenant,
-                client:apolloClient
             }
         )
     }
