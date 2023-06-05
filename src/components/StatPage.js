@@ -8,7 +8,7 @@ import TabellaPiani from "./TabellaPiani";
 import {Card } from '@mui/material';
 import { useLazyQuery } from "@apollo/client";
 import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY,GET_PLANS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
-
+import LoadingLayer from "./LoadingLayer";
 
 function StatPageComp(props) {
 
@@ -20,7 +20,7 @@ function StatPageComp(props) {
   const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
 
 
-  const [ queryGetPollutantCity
+  const [ queryGetPollutantCity,{loading}
   ] = useLazyQuery(POLLUTANT_OF_CITY, { //
     fetchPolicy: "no-cache",
     onCompleted: (data) => { 
@@ -60,10 +60,10 @@ function StatPageComp(props) {
 
   useEffect(()=>{
     if(location.city){
-      const variable={variables:{city:location.city}}
-      queryGetPollutantCity(variable);
-      queryIllnessCity(variable);
-      queryPlansCity(variable);
+      const argument={variables:{city:location.city}}
+      queryGetPollutantCity(argument);
+      queryIllnessCity(argument);
+      queryPlansCity(argument);
     }
     function handleResize() {
       setWindowDimensions(getWindowDimensions());
@@ -76,7 +76,6 @@ function StatPageComp(props) {
     //getPiani();
   },[])
 
-  
   function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
     return {
@@ -149,6 +148,9 @@ function StatPageComp(props) {
               }
           </Box>  
         </Box>
+        {
+          loading && <LoadingLayer/>
+        }
     </Box>
   );
 }
