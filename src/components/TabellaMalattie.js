@@ -32,18 +32,18 @@ function TabellaMalattie(props){
                 <TableBody>
                 {props.elencoMalattie.map((malattia) => (
                     <TableRow
-                    key={malattia.nome_malattia}
+                    key={malattia.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                     <TableCell component="th" scope="row">
-                        {malattia.nome_malattia}
+                        {malattia.name}
                     </TableCell>
                     <TableCell component="th" scope="row">
                         {malattia.count}
                     </TableCell>
-                    <TableCell>{malattia.indice_mortalita}</TableCell>
-                    <TableCell>{malattia.giorni_durata_media}</TableCell>
-                    <TableCell><Button variant="outlined" onClick={()=>{setMalattiaSel(malattia.nome_malattia);setShowLayer(true)}}>Mostra Cause</Button></TableCell>
+                    <TableCell>{malattia.mortality_index}</TableCell>
+                    <TableCell>{malattia.average_duration_days}</TableCell>
+                    <TableCell><Button variant="outlined" onClick={()=>{setMalattiaSel(malattia.id);setShowLayer(true)}}>Mostra Cause</Button></TableCell>
                     </TableRow>
                 ))}
                 </TableBody>

@@ -7,16 +7,15 @@ import TabellaMalattie from "./TabellaMalattie";
 import TabellaPiani from "./TabellaPiani";
 import {Card } from '@mui/material';
 import { useLazyQuery } from "@apollo/client";
-import { POLLUTANT_OF_CITY } from "./StatPageGQL";
+import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY,GET_PLANS_OF_CITY} from "./StatPageGQL";
 
 
 function StatPageComp(props) {
 
   const location = useLocation();
-  const size = React.useContext(ResponsiveContext);
   const [elencoAgentiInq,setElencoAgentiInq]=React.useState([]);
   const [mapRil,setMapRil]=React.useState(new Map());
-  const [elencoMalattie,setElencoMalattia]=React.useState([{nome_malattia:"fsada",count:1,indice_mortalita:0.5,giorni_durata_media:7}]);
+  const [elencoMalattie,setElencoMalattia]=React.useState([]);
   const [elencoPiani,setElencoPiani]=React.useState([]);
   const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
 
@@ -34,8 +33,22 @@ function StatPageComp(props) {
     notifyOnNetworkStatusChange: true, // did the work
   });
 
+  const [ queryIllnessOfCity
+  ] = useLazyQuery(ILLNESS_OF_CITY, { 
+    fetchPolicy: "no-cache",
+    onCompleted: (data) => { 
+      if(data.ilnessCity){ 
+        setElencoMalattia(data.ilnessCity)
+      }
+    },
+    notifyOnNetworkStatusChange: true, // did the work
+  });
+
   useEffect(()=>{
-    queryGetPollutantCity({variables:{city:location.city}})
+    if(location.city){
+      queryGetPollutantCity({variables:{city:location.city}});
+      queryIllnessOfCity({variables:{city:location.city}})
+    }
     function handleResize() {
       setWindowDimensions(getWindowDimensions());
     }
