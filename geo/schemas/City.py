@@ -26,7 +26,7 @@ class CityMutation(DjangoFormMutation):
 
 class Query(graphene.ObjectType):
     cities = graphene.List(CityType,id=graphene.ID(),name=graphene.String(),lat=graphene.Float(),lng=graphene.Float(),male_percentage=graphene.Int(),female_percentage=graphene.Int())
-    city = graphene.Field(CityType, id=graphene.Int(),name=graphene.String())
+    city = graphene.Field(CityType, name=graphene.String())
 
     @staticmethod
     def resolve_cities(self,info,**kwargs):
@@ -36,8 +36,8 @@ class Query(graphene.ObjectType):
         result=City.objects.filter(**filters)
         return result
 
-    def resolve_city(self, info, id):
-        return City.objects.get(pk=id)
+    def resolve_city(self, info, name):
+        return City.objects.get(name__exact=name)
 
 
 class DeleteCity(CustomDeleteMutation):

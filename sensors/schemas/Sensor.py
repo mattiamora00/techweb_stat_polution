@@ -26,7 +26,7 @@ class SensorMutation(DjangoFormMutation):
 
 class Query(graphene.ObjectType):
     sensors = graphene.List(SensorType,lat=graphene.Float(),lng=graphene.Float(),date_change_filter=graphene.Date(),oxidation_level=graphene.Float(),sensor_model=graphene.String())
-    sensor = graphene.Field(SensorType, id=graphene.Int())
+    sensor = graphene.Field(SensorType, sensor_code=graphene.String())
 
     @staticmethod
     def resolve_sensors(self,info,**kwargs):
@@ -37,8 +37,8 @@ class Query(graphene.ObjectType):
         return result
 
 
-    def resolve_sensor(self, info, id):
-        return Sensor.objects.get(pk=id)
+    def resolve_sensor(self, info, sensor_code):
+        return Sensor.objects.get(sensor_code=sensor_code)
 
 
 class DeleteSensor(CustomDeleteMutation):
