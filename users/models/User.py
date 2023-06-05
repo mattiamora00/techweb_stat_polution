@@ -9,3 +9,6 @@ class User(models.Model):
     view_plan=models.BooleanField(default=False)
     view_graph=models.BooleanField(default=False)
     view_sick=models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"${self.username} {self.email}"
