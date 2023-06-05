@@ -7,6 +7,7 @@ import Fab from '@mui/material/Fab';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useLazyQuery } from "@apollo/client";
 import { QUERY_GET_SENSORS,QUERY_GET_CITIES } from "./MapCompGQL";
+import LoadingLayer from "./LoadingLayer";
 
 const MapComponent= () => {
 
@@ -16,7 +17,7 @@ const MapComponent= () => {
     const [sensore,setSensore]=React.useState();
     const [elencoCitta,setElencoCitta]=React.useState([]);
     let history = useHistory();
-    const [ queryGetSensors
+    const [ queryGetSensors,{loading}
     ] = useLazyQuery(QUERY_GET_SENSORS, { //{variables:{JSON}}
       fetchPolicy: "no-cache",
       onCompleted: (data) => { 
@@ -49,16 +50,7 @@ const MapComponent= () => {
       queryGetSensors();
       queryGetCities();
     },[])
-    
-    function getCity() {
-      fetch('https://pollutionstat.com/server/getCity')
-        .then(response => {
-          return response.text();
-        })
-        .then(data => {
-         setElencoCitta(JSON.parse(data));
-        });
-    }
+  
  
     function openLayer(sensore){
       setSensore(sensore);
@@ -75,15 +67,7 @@ const MapComponent= () => {
         setPosition(currentPosition);
       });
     }
-
-    /**
-     *  <Marker 
-              width={50}
-              anchor={[sensore.latitudine,sensore.longitudine]} 
-              color="#c62828"
-              onClick={()=>{openLayer(sensore)}} 
-     */
-
+    
   return (
     <Box width="100vw" height="100vh">
       <Map height="100%" onBoundsChanged={()=>{setPosition([])}} defaultCenter={position} center={position} defaultZoom={3}>   
@@ -120,6 +104,9 @@ const MapComponent= () => {
           position: 'fixed',}} color="primary" aria-label="add">
         <LocationOnIcon />
       </Fab>
+      {
+        loading && <LoadingLayer/>
+      }
     </Box>
   );
 };

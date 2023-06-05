@@ -15,7 +15,6 @@ function TabellaMalattie(props){
     const [showLayer,setShowLayer]=React.useState(false);
     const [malattiaSel,setMalattiaSel]=React.useState("");
 
-
     return(
         <Card elevation="5">
                 <TableContainer component={Paper}>

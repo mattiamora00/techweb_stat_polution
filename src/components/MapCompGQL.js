@@ -6,6 +6,15 @@ query sensors{
     id
     lat
     lng
+    sensorCode
+    pollutant{
+      id
+      name
+    }
+    city{
+      id
+      name
+    }
   }
 }
 `
