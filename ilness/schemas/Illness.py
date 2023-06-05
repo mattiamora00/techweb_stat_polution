@@ -3,6 +3,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphene import relay, ObjectType
 from ..models.Illness import Illness
+from ..models.Sick import Sick
 from geo.models.City import City
 from ..forms.Illness import IllnessForm
 from graphene_django.forms.mutation import DjangoFormMutation
@@ -36,8 +37,8 @@ class Query(graphene.ObjectType):
     @staticmethod
     def resolve_ilness_city(self,info, city):
         city_id=City.objects.get(name__exact=city).id
-        illness_list= [{"name":illness.nome,"mortality_index":illness.mortality_index,"average_duration_days":illness.average_duration_days}  for illness in Illness.objects.filter(sickillness__sick__population_id=city_id)]
-        return illness_list
+        illness_list= [{"id":illness.id,"name":illness.nome,"mortality_index":illness.mortality_index,"average_duration_days":illness.average_duration_days,"count":Sick.objects.filter(sickillness__ilness_id=illness.id).count()}  for illness in Illness.objects.filter(sickillness__sick__population_id=city_id)]
+        return list({v['id']:v for v in illness_list}.values())
 
 
     @staticmethod
