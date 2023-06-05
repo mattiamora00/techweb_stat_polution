@@ -13,8 +13,8 @@ query IllessCity($city:String!){
 `
 
 const PLANS_OF_CITY=gql`
-query city($name:String!){
-  city(name:$name){
+query city($city:String!){
+  city(name:$city){
     planSet{
       edges{
         node{
@@ -23,6 +23,7 @@ query city($name:String!){
           startDate
           endDate
           success
+          description
           goalSet{
             edges{
               node{

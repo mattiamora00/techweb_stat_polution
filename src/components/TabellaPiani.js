@@ -20,7 +20,7 @@ function TabellaPiani(props){
           <Layer onEsc={()=>setShowLayerDescrizione(false)} onClickOutside={()=>setShowLayerDescrizione(false)}>
             <Box pad="small" gap="small" width="40vw" height="40vh">
                 <TextArea readOnly={true} resize={false} fill >
-                  {descrizionePianoSel}
+                  {descrizionePianoSel!=""?descrizionePianoSel:"NESSUNA DESCRIZIONE INSERITA PER QUESTO PIANO"}
                 </TextArea>
               <Button color="primary" style={{height:"40px"}}   variant="contained" onClick={()=>{setShowLayerDescrizione(false)}}>Chiudi</Button>
             </Box>
@@ -46,17 +46,17 @@ function TabellaPiani(props){
                 <TableBody>
                 {props.elencoPiani.map((piano) => (
                     <TableRow
-                    key={piano.nome}
+                    key={piano.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                     <TableCell component="th" scope="row">
-                        {piano.nome}
+                        {piano.name}
                     </TableCell>
-                    <TableCell>{piano.data_inizio.toString().split('T')[0]}</TableCell>
-                    <TableCell>{piano.data_fine.toString().split('T')[0]}</TableCell>
-                    <TableCell>{piano.inquinante}</TableCell>
-                    <TableCell>{(piano.successo)?"Sì":"No"}</TableCell>
-                    <TableCell><Button variant="outlined" onClick={()=>{setDescrizionePianoSel(piano.descrizione);setShowLayerDescrizione(true)}}>Mostra Descrizione</Button></TableCell>
+                    <TableCell>{piano.startDate.toString().split('T')[0]}</TableCell>
+                    <TableCell>{piano.endDate.toString().split('T')[0]}</TableCell>
+                    <TableCell>{piano.goalSet.edges.length>0?piano.goalSet.edges[0].node.pollutant.name:null}</TableCell>
+                    <TableCell>{(piano.success)?"Sì":"No"}</TableCell>
+                    <TableCell><Button variant="outlined" onClick={()=>{setDescrizionePianoSel(piano.description);setShowLayerDescrizione(true)}}>Mostra Descrizione</Button></TableCell>
                     </TableRow>
                 ))}
                 </TableBody>

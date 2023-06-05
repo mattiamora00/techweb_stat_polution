@@ -7,7 +7,7 @@ import TabellaMalattie from "./TabellaMalattie";
 import TabellaPiani from "./TabellaPiani";
 import {Card } from '@mui/material';
 import { useLazyQuery } from "@apollo/client";
-import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY,GET_PLANS_OF_CITY} from "./StatPageGQL";
+import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY,GET_PLANS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
 
 
 function StatPageComp(props) {
@@ -33,7 +33,7 @@ function StatPageComp(props) {
     notifyOnNetworkStatusChange: true, // did the work
   });
 
-  const [ queryIllnessOfCity
+  const [ queryIllnessCity
   ] = useLazyQuery(ILLNESS_OF_CITY, { 
     fetchPolicy: "no-cache",
     onCompleted: (data) => { 
@@ -44,10 +44,26 @@ function StatPageComp(props) {
     notifyOnNetworkStatusChange: true, // did the work
   });
 
+  const [ queryPlansCity
+  ] = useLazyQuery(PLANS_OF_CITY, { 
+    fetchPolicy: "no-cache",
+    onCompleted: (data) => { 
+      const planList=data.city.planSet.edges.map((el)=>el.node);
+      if(planList){
+        console.log(planList);
+        setElencoPiani(planList);
+      }
+    },
+    notifyOnNetworkStatusChange: true, // did the work
+  });
+
+
   useEffect(()=>{
     if(location.city){
-      queryGetPollutantCity({variables:{city:location.city}});
-      queryIllnessOfCity({variables:{city:location.city}})
+      const variable={variables:{city:location.city}}
+      queryGetPollutantCity(variable);
+      queryIllnessCity(variable);
+      queryPlansCity(variable);
     }
     function handleResize() {
       setWindowDimensions(getWindowDimensions());
@@ -72,32 +88,6 @@ function StatPageComp(props) {
   React.useEffect(()=>{
     console.log(windowDimensions)
   },[windowDimensions])
-
-
-  
-  function getMalattieCitta() {
-    let id = location.city;
-    fetch(`https://pollutionstat.com/server/getMalattieCitta/`+id)
-      .then(response => {
-        return response.text();
-      })
-      .then(data => {
-        setElencoMalattia(JSON.parse(data));
-      });
-  }
-
-  function getPiani() {
-    let citta = location.city;
-    fetch(`https://pollutionstat.com/server/getPianoCitta/`+citta)
-      .then(response => {
-        return response.text();
-      })
-      .then(data => {
-        setElencoPiani(JSON.parse(data));
-      });
-  }
-
-  
 
   return (
       <Box>
@@ -144,14 +134,14 @@ function StatPageComp(props) {
             </Box>
             }
             {elencoPiani.length>0?
-            <>
-            <Text weight="bold">PIANI ADOTTATI</Text>
-            <Card elevation="5" height="50%" overflow="auto">
-              <Box height="50%" overflow="auto" gap="small">
-                <TabellaPiani elencoPiani={elencoPiani}/>
-              </Box>
-            </Card>
-            </>
+            <Box gap="small">
+              <Text weight="bold">PIANI ADOTTATI</Text>
+              <Card elevation="5" height="50%" overflow="auto">
+                <Box height="50%" overflow="auto" gap="small">
+                  <TabellaPiani elencoPiani={elencoPiani}/>
+                </Box>
+              </Card>
+            </Box>
               :
               <Box margin="2%">
                 <Text weight="bold">LA CITTÀ NON HA ANCORA ADOTTATO DEI PIANI</Text>
