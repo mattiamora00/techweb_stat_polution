@@ -36,62 +36,8 @@ def location(f):
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
 
-# Django-Tenants Settings
-TENANT_MODEL = "tenant.Tenant"
-TENANT_DOMAIN_MODEL = "tenant.Domain"
-TENANT_LIMIT_SET_CALLS = True
-HAS_MULTI_TYPE_TENANTS = True
-MULTI_TYPE_DATABASE_FIELD = 'type'
 
-TENANT_TYPES = {
-    "public": {  # this is the name of the public schemas from get_public_schema_name
-        "APPS": [
-            'django.contrib.contenttypes',
-            'django.contrib.admin',
-            'django.contrib.auth',
-            'django.contrib.sessions',
-            'django.contrib.messages',
-            'django.contrib.staticfiles',
-            'corsheaders',
-            'django_tenants',
-            'django_filters',
-            'graphene_django',
-            'tenant',
-            'ilness',
-            'geo',
-            'plans',
-            'pollutants',
-            'pollutionstat'
-            # sharecd apps here
-        ],
-        "URLCONF": "pollutionstat.urls",
-    },
-    "CLASSIC": {  # this is the name of the public schemas from get_public_schema_name
-        "APPS": [
-            'django.contrib.contenttypes',
-            'django.contrib.admin',
-            'django.contrib.auth',
-            'django.contrib.sessions',
-            'django.contrib.messages',
-            'django.contrib.staticfiles',
-            'corsheaders',
-            'django_filters',
-            'graphene_django',
-            'users',
-            'sensors',
-        ],
-        "URLCONF": "pollutionstat.urls",
-    },
-}
 
-ROOT_URLCONF = 'pollutionstat.urls'
-
-INSTALLED_APPS = []
-for schema in TENANT_TYPES:
-    INSTALLED_APPS += [app for app in TENANT_TYPES[schema]["APPS"] if app not in INSTALLED_APPS]
-
-# Application definition
-"""
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -99,19 +45,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'django_filters',
+    'graphene_django',
+    'pollutionstat',
     'ilness',
     'geo',
     'plans',
     'pollutants',
-    'sensors'
+    'sensors',
+    'users',
 ]
-"""
+
 GRAPHENE = {
     'SCHEMA': 'pollutionstat.schemas.schemas',
 }
 
 MIDDLEWARE = [
-    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -148,8 +98,7 @@ WSGI_APPLICATION = 'pollutionstat.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_tenants.postgresql_backend',
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2', django_tenants.postgresql_backend
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'pollutionstatdb',
         'USER': 'pollutionstatdb',
         'PASSWORD': 'pollutionstatdb',
@@ -161,9 +110,6 @@ DATABASES = {
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-DATABASE_ROUTERS = (
-    'django_tenants.routers.TenantSyncRouter',
-)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

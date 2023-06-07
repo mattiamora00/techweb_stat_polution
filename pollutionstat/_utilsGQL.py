@@ -1,5 +1,11 @@
+import json
+
 import graphene
 from graphene.types.mutation import MutationOptions
+
+
+def get_content(response, operation_name) -> dict:
+    return json.loads(response.content)['data'][operation_name]
 
 class CustomDeleteMutation(graphene.Mutation):
     ok = graphene.Boolean()

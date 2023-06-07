@@ -3,21 +3,19 @@ from .models.Cause import Cause
 from .models.Illness import Illness
 from .models.Sick import Sick
 from .models.SickIllness import SickIllness
-from tenant.utils.admin import TenantAdmin,SharedAdmin
-from tenant.models import Tenant
 
 @admin.register(Cause)
-class AdminCause(SharedAdmin):
+class AdminCause(admin.ModelAdmin):
     model = Cause
 
 @admin.register(Illness)
-class AdminIllness(SharedAdmin):
+class AdminIllness(admin.ModelAdmin):
     model = Illness
 
 @admin.register(Sick)
-class AdminSick(SharedAdmin):
+class AdminSick(admin.ModelAdmin):
     model = Sick
 
 @admin.register(SickIllness)
-class AdminSickIllness(SharedAdmin):
+class AdminSickIllness(admin.ModelAdmin):
     model = SickIllness
