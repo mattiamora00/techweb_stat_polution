@@ -51,7 +51,7 @@ class Query(graphene.ObjectType):
         session = Session.objects.filter(token=hashlib.sha256(token.encode('utf-8')).hexdigest())
         if len(session) == 1:
             user=User.objects.get(pk=session[0].user_id.id)
-            return json.dumps({"userId": user.id, "userData": {"imageProfile":user.profile_image.name,"viewPlan":user.view_plan,"viewSensor":user.view_sensor,"viewSick":user.view_sick,"viewGraph":user.view_graph}})
+            return json.dumps({"userId": user.id, "userData": {"username":user.username,"email":user.email ,"imageProfile":user.profile_image.name,"viewPlan":user.view_plan,"viewSensor":user.view_sensor,"viewSick":user.view_sick,"viewGraph":user.view_graph,"password":user.password}})
         else:
             return -1
 
