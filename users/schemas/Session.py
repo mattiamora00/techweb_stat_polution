@@ -50,7 +50,8 @@ class Query(graphene.ObjectType):
     def resolve_session_user_id(self,info,token):
         session = Session.objects.filter(token=hashlib.sha256(token.encode('utf-8')).hexdigest())
         if len(session) == 1:
-            return session.user_id.id
+            user=User.objects.get(pk=session[0].user_id.id)
+            return json.dumps({"userId": user.id, "userData": {"imageProfile":user.profile_image.name,"viewPlan":user.view_plan,"viewSensor":user.view_sensor,"viewSick":user.view_sick,"viewGraph":user.view_graph}})
         else:
             return -1
 
