@@ -26,7 +26,7 @@ class UserType(DjangoObjectType):
         interfaces = (relay.Node,)
 
 
-class UserMutation(DjangoFormMutation):
+class UserMutation(DjangoModelFormMutation):
     class Meta:
         form_class = UserForm
 
