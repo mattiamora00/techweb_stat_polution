@@ -9,16 +9,45 @@ import {Card } from '@mui/material';
 import { useLazyQuery } from "@apollo/client";
 import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
 import LoadingLayer from "./LoadingLayer";
+import Avatar from '@mui/material/Avatar';
+import {SESSION} from "./LoginGQL";
+import { useCookies } from 'react-cookie';
+import { useHistory } from "react-router-dom";
+
 
 function StatPageComp(props) {
 
   const location = useLocation();
+  const history=useHistory();
   const [elencoAgentiInq,setElencoAgentiInq]=React.useState([]);
   const [mapRil,setMapRil]=React.useState(new Map());
   const [elencoMalattie,setElencoMalattia]=React.useState([]);
   const [elencoPiani,setElencoPiani]=React.useState([]);
   const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
+  const [ querySession,
+  ] = useLazyQuery(SESSION, { //
+    fetchPolicy: "no-cache",
+    onCompleted: (data) => { 
+      console.log(data);
+      const userId=data.sessionUserId
+      if(userId>0){
+        sessionStorage.setItem("ps_session_user_id", userId)
+      }else{
+        window.location.href = window.location.origin + "/";
+      }
+    },
+    notifyOnNetworkStatusChange: true, // did the work
+  });
 
+  React.useEffect(()=>{
+      const sessionToken=sessionStorage.getItem("ps_sessiontoken");
+      if(sessionToken===undefined || sessionToken===null){
+        window.location.href = window.location.origin + "/";
+      }else{
+        console.log("ELSE");
+        querySession({variables:{token:sessionToken}})
+      }
+  },[])
 
   const [ queryGetPollutantCity,{loading}
   ] = useLazyQuery(POLLUTANT_OF_CITY, { //
@@ -70,9 +99,6 @@ function StatPageComp(props) {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-
-    //getMalattieCitta();
-    //getPiani();
   },[])
 
   function getWindowDimensions() {
@@ -86,18 +112,24 @@ function StatPageComp(props) {
   return (
       <Box>
         <AppBar position="static">
-          <Toolbar variant="dense">
+          <Toolbar variant="dense" sx={{ justifyContent: "space-between" }}>
             <Typography variant="h6" color="inherit" component="div">
               Statistiche {location.city}
             </Typography>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
           </Toolbar>
         </AppBar>
         <Box  direction={windowDimensions.width<=1200?"column":"row"} overflow="auto" pad="small">
           <Box height="100%" width="100%"  gap="small" direction="column" overflow="auto" pad="small">
             <Box margin="7px">
-              <Text weight="bold">ANDAMENTO AGENTI INQUINANTI</Text>
+              {
+              elencoAgentiInq.length>0?
+                <Text weight="bold">ANDAMENTO AGENTI INQUINANTI</Text>
+                :
+                <Text weight={"bold"} color="red">NESSUN DATO TROVATO</Text>
+              }
             </Box>
-          {
+          {          
             elencoAgentiInq.map((agente)=>{
               if(mapRil[agente]){
                 return(
@@ -124,7 +156,7 @@ function StatPageComp(props) {
             </Box>
             :
             <Box margin="2%">
-              <Text weight="bold">LA CITTÀ NON HA ANCORA SEGNALATO DEI MALATI</Text>
+              <Text weight="bold" color="red">LA CITTÀ NON HA ANCORA SEGNALATO DEI MALATI</Text>
             </Box>
             }
             {elencoPiani.length>0?
@@ -138,7 +170,7 @@ function StatPageComp(props) {
             </Box>
               :
               <Box margin="2%">
-                <Text weight="bold">LA CITTÀ NON HA ANCORA ADOTTATO DEI PIANI</Text>
+                <Text weight="bold" color="red">LA CITTÀ NON HA ANCORA ADOTTATO DEI PIANI</Text>
               </Box>
               }
           </Box>  

@@ -20,11 +20,11 @@ function Root(){
     cache: new InMemoryCache(),
   });
 
-  const [client,setClient]=React.useState(apolloClient)
+  const [client]=React.useState(apolloClient)
   
   return (
     <ApolloProvider client={client}>
-      <Routes setClient={setClient}/>
+      <Routes/>
     </ApolloProvider>
   )
 }
