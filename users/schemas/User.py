@@ -58,7 +58,7 @@ class Query(graphene.ObjectType):
                 new_session.save()
                 return json.dumps({"success": True, "token": token})
             else:
-                return json.dumps({"success": False, "error": "Error: wrong password}"})
+                return json.dumps({"success": False, "error": "Error: wrong password"})
         else:
             return json.dumps({"success": False, "error": "Error: user not found"})
 
