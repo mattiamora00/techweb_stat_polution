@@ -3,6 +3,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphene import relay, ObjectType
 from ..models.Sensor import Sensor
+from ..models.Sensor import Sensor
 from ..forms.Sensor import SensorForm
 from graphene_django.forms.mutation import DjangoFormMutation
 from graphene_django.forms.mutation import DjangoModelFormMutation
