@@ -9,9 +9,9 @@ class User(models.Model):
     password=models.CharField(max_length=64,validators=[MinLengthValidator(64)])
     view_sensor=models.BooleanField(default=False)
     view_plan=models.BooleanField(default=False)
-    view_graph=models.BooleanField(default=False)
+    view_graph=models.BooleanField(default=True)
     view_sick=models.BooleanField(default=False)
     profile_image = models.ImageField(upload_to ='profile_image/',blank=True,null=True)
 
     def __str__(self):
-        return f"${self.username} {self.email}"
+        return f"{self.username} {self.email}"

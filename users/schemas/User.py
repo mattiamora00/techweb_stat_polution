@@ -31,6 +31,24 @@ class UserMutation(DjangoModelFormMutation):
         form_class = UserForm
 
 
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        if "id" in input:
+            return super().mutate_and_get_payload(root, info, **input)
+        else:
+            username=input["username"]
+            password=input["password"]
+            email=input["email"]
+            crypt_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            if "imageProfile" in input:
+                image_profile=input["imageProfile"]
+                User.objects.create(email=email, username=username, password=crypt_password,
+                                    image_profile=image_profile)
+            else:
+                User.objects.create(email=email, username=username, password=crypt_password)
+            return super().mutate_and_get_payload(root, info, **input)
+
+
 class Query(graphene.ObjectType):
     users = graphene.List(UserType,username=graphene.String(),email=graphene.String())
     user = graphene.Field(UserType, id=graphene.Int())
