@@ -8,8 +8,9 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useLazyQuery } from "@apollo/client";
 import { QUERY_GET_SENSORS,QUERY_GET_CITIES } from "./MapCompGQL";
 import LoadingLayer from "./LoadingLayer";
+import AvatarComponent from "./AvatarComponent";
 
-const MapComponent= () => {
+const MapComponent= (props) => {
 
     const [showLayer,setShowLayer]=React.useState(false);
     const [elencoSensori,setElencoSensori]=React.useState([]);
@@ -20,10 +21,10 @@ const MapComponent= () => {
     const [ queryGetSensors,{loading}
     ] = useLazyQuery(QUERY_GET_SENSORS, { //{variables:{JSON}}
       fetchPolicy: "no-cache",
-      onCompleted: (data) => { 
-        const sensors=data.sensors;
+      onCompleted: (data) => {
+        const sensors=data.user.sensorsusersSet
         if(sensors){
-          setElencoSensori(sensors);
+          setElencoSensori(sensors.map((el)=>el.sensor))
         }
       },
       notifyOnNetworkStatusChange: true, // did the work
@@ -47,9 +48,12 @@ const MapComponent= () => {
     }
 
     useEffect(()=>{
-      queryGetSensors();
+      const data=props.userData;
+      if(data.viewSensor){
+        queryGetSensors({variables:{userId:data.id}});
+      }
       queryGetCities();
-    },[])
+    },[props.userData])
   
  
     function openLayer(sensore){

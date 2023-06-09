@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar,Toolbar,Typography } from '@mui/material';
-import {Box,Card} from "grommet";
+import {Box,Card,Text} from "grommet";
 import MapComponent from "./MapComp"
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -10,14 +10,14 @@ import { useHistory } from "react-router-dom";
 import { ApolloProvider,ApolloClient,InMemoryCache,HttpLink} from '@apollo/client';
 import {USER_AUTH,SESSION} from "./LoginGQL";
 import { useLazyQuery } from "@apollo/client";
-import Cookies from 'js-cookie';
-import { useCookies } from "react-cookie";
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import RegisterUser from "./RegisterUser";
 
 function Login(props) {
     
     const history=useHistory();
-    const [loginData,setLoginData]=React.useState({username:"mattia",password:"Mattia123"});
-    const [cookies, setCookie, removeCookie] = useCookies([]);
+    const [loginData,setLoginData]=React.useState({username:"",password:""});
+    const [loginError,setLoginError]=React.useState(null);
     const [ queryLogin,
     ] = useLazyQuery(USER_AUTH, { //
       fetchPolicy: "no-cache",
@@ -25,15 +25,23 @@ function Login(props) {
         const res=JSON.parse(data.userAuth);
         if(res){
             if(res.success){
+                setLoginError(null);
                 sessionStorage.setItem("ps_sessiontoken",res.token)
                 history.push(
                     {
                         pathname: '/home',
                     })
             }else{
-                alert("Errore, credenziali errate")
+                alert(res.error)
+                setLoginError(res.error)
             }
         }
+      },
+      onError:(error)=>{
+        if(error.message==="User matching query does not exist."){
+            alert("Errors, user not found")
+        }
+       
       },
       notifyOnNetworkStatusChange: true, // did the work
     });
@@ -45,6 +53,16 @@ function Login(props) {
     function login(){
         queryLogin({variables:loginData})
     }
+
+    function goToReisterUser(){
+        history.push({
+            pathname:"/RegisterUser"
+        })
+    }
+
+    React.useEffect(()=>{
+        sessionStorage.clear();
+    })
 
     return (
     <Box height="100vh" background="#e8ecfc ">
@@ -70,6 +88,7 @@ function Login(props) {
                     <TextField
                         name="password"
                         label="Password"
+                        type="password"
                         value={loginData && loginData.password}
                         onChange={onChangeTextInput}
                     />
@@ -77,6 +96,12 @@ function Login(props) {
                     <Button variant="contained" endIcon={<LoginIcon />} onClick={login}>
                         Login
                     </Button>
+                    <Button color="success" variant="contained" endIcon={<AssignmentIndIcon />} onClick={goToReisterUser}>
+                        Registrati
+                    </Button>
+                    {
+                        loginError && <Text weight="bold" color="red">{loginError}</Text>
+                    }
                 </Box>
             </Card>
         </Box>

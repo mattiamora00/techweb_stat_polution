@@ -9,10 +9,10 @@ import {Card } from '@mui/material';
 import { useLazyQuery } from "@apollo/client";
 import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
 import LoadingLayer from "./LoadingLayer";
-import Avatar from '@mui/material/Avatar';
 import {SESSION} from "./LoginGQL";
-import { useCookies } from 'react-cookie';
 import { useHistory } from "react-router-dom";
+import AvatarComponent from "./AvatarComponent";
+import { URL_MEDIA_ROOT ,readDataSession,checkToken} from "./global";
 
 
 function StatPageComp(props) {
@@ -24,29 +24,23 @@ function StatPageComp(props) {
   const [elencoMalattie,setElencoMalattia]=React.useState([]);
   const [elencoPiani,setElencoPiani]=React.useState([]);
   const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
+  const [imageProfile,setImageProfile]=React.useState();
+  const [userData,setUserData]=React.useState({});
   const [ querySession,
   ] = useLazyQuery(SESSION, { //
     fetchPolicy: "no-cache",
     onCompleted: (data) => { 
-      console.log(data);
-      const userId=data.sessionUserId
-      if(userId>0){
-        sessionStorage.setItem("ps_session_user_id", userId)
-      }else{
-        window.location.href = window.location.origin + "/";
-      }
+      readDataSession(data,setImageProfile,setUserData)
     },
     notifyOnNetworkStatusChange: true, // did the work
   });
 
   React.useEffect(()=>{
-      const sessionToken=sessionStorage.getItem("ps_sessiontoken");
-      if(sessionToken===undefined || sessionToken===null){
-        window.location.href = window.location.origin + "/";
-      }else{
-        console.log("ELSE");
-        querySession({variables:{token:sessionToken}})
-      }
+    console.log(userData);
+  }, [userData])
+
+  React.useEffect(()=>{
+    checkToken(querySession)
   },[])
 
   const [ queryGetPollutantCity,{loading}
@@ -116,7 +110,11 @@ function StatPageComp(props) {
             <Typography variant="h6" color="inherit" component="div">
               Statistiche {location.city}
             </Typography>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+           {
+            imageProfile &&  
+              <AvatarComponent imageProfile={imageProfile}/>
+           }
+           
           </Toolbar>
         </AppBar>
         <Box  direction={windowDimensions.width<=1200?"column":"row"} overflow="auto" pad="small">
@@ -126,10 +124,11 @@ function StatPageComp(props) {
               elencoAgentiInq.length>0?
                 <Text weight="bold">ANDAMENTO AGENTI INQUINANTI</Text>
                 :
-                <Text weight={"bold"} color="red">NESSUN DATO TROVATO</Text>
+                <Text weight={"bold"} color="red">{!loading?"NESSUN DATO TROVATO":""}</Text>
               }
             </Box>
-          {          
+
+          { userData && userData.viewGraph?       
             elencoAgentiInq.map((agente)=>{
               if(mapRil[agente]){
                 return(
@@ -141,36 +140,52 @@ function StatPageComp(props) {
                 return null;
               }
             })
+            :
+            <Box margin="2%">
+              <Text weight="bold" color="red">{!loading?"NON HAI I PERMESSI PER VISIONARE LE RILEVAZIONI":""}</Text>
+            </Box>
           }
           </Box>
           <Box height="100%" width="100%" pad="small" gap="small">
           {
-            elencoMalattie.length>0?
-            <Box gap="small" >
-              <Text weight="bold">ELENCO MALATTIE</Text>
-              <Card  elevation="5">
-                <Box height="50%" overflow="auto" gap="small">
-                  <TabellaMalattie elencoMalattie={elencoMalattie}/>
-                </Box>
-              </Card>
-            </Box>
-            :
-            <Box margin="2%">
-              <Text weight="bold" color="red">LA CITTÀ NON HA ANCORA SEGNALATO DEI MALATI</Text>
-            </Box>
-            }
-            {elencoPiani.length>0?
-            <Box gap="small">
-              <Text weight="bold">PIANI ADOTTATI</Text>
-              <Card elevation="5" height="50%" overflow="auto">
-                <Box height="50%" overflow="auto" gap="small">
-                  <TabellaPiani elencoPiani={elencoPiani}/>
-                </Box>
-              </Card>
-            </Box>
+            userData && userData.viewSick && !loading ?  
+              elencoMalattie.length>0?
+              <Box gap="small" >
+                <Text weight="bold">ELENCO MALATTIE</Text>
+                <Card  elevation="5">
+                  <Box height="50%" overflow="auto" gap="small">
+                    <TabellaMalattie elencoMalattie={elencoMalattie}/>
+                  </Box>
+                </Card>
+              </Box>
               :
               <Box margin="2%">
-                <Text weight="bold" color="red">LA CITTÀ NON HA ANCORA ADOTTATO DEI PIANI</Text>
+                <Text weight="bold" color="red">LA CITTÀ NON HA ANCORA SEGNALATO DEI MALATI</Text>
+              </Box>
+            :
+            <Box margin="2%">
+              <Text weight="bold" color="red">{!loading? "NON HAI I PERMESSI PER VISIONARE LE MALATTIE":""}</Text>
+            </Box>
+            }
+            {
+            userData && userData.viewPlan && !loading?
+
+              elencoPiani.length>0?
+              <Box gap="small">
+                <Text weight="bold">PIANI ADOTTATI</Text>
+                <Card elevation="5" height="50%" overflow="auto">
+                  <Box height="50%" overflow="auto" gap="small">
+                    <TabellaPiani elencoPiani={elencoPiani}/>
+                  </Box>
+                </Card>
+              </Box>
+                :
+                <Box margin="2%">
+                  <Text weight="bold" color="red">LA CITTÀ NON HA ANCORA ADOTTATO DEI PIANI</Text>
+                </Box>
+              :
+                <Box margin="2%">
+                  <Text weight="bold" color="red">{!loading?"NON HAI I PERMESSI PER VISIONARE I PIANI":""}</Text>
               </Box>
               }
           </Box>  
