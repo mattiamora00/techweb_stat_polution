@@ -1,5 +1,6 @@
+import base64
 import json
-
+import io
 import graphene
 from graphene.types.generic import GenericScalar
 
@@ -15,6 +16,7 @@ from pollutionstat._utilsGQL import CustomDeleteMutation
 from graphene_django.filter import DjangoFilterConnectionField
 import hashlib
 import string, random
+from django.core.files.uploadedfile import UploadedFile
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -29,21 +31,42 @@ class UserType(DjangoObjectType):
 class UserMutation(DjangoModelFormMutation):
     class Meta:
         form_class = UserForm
+        file_fields = ["profile_image"]
 
+    @classmethod
+    def convert_file_payload_to_file_data(cls, input):
+        file_data = json.loads(input["profile_image"])
+        b64_file_content = file_data.get("content", None).encode()
+        if b64_file_content.startswith(b"data"):
+            b64_file_content = b64_file_content.split(b"base64,")[1]
+            file_content = base64.b64decode(b64_file_content)
+            file = UploadedFile(io.BytesIO(file_content),
+                                name=file_data["name"],
+                                size=file_data.get("size", None),
+                                content_type=file_data.get("ype", None))
+            return file
+        return None
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
+        username = input["username"]
+        password = input["password"]
+        email = input["email"]
         if "id" in input:
+            if "profile_image" in input:
+                file = cls.convert_file_payload_to_file_data(input)
+                user=User.objects.filter(pk=input["id"])[0]
+                user.profile_image=file
+                user.save()
+                User.objects.filter(pk=input["id"]).update(email=email, username=username, password=password)
+            else:
+                User.objects.filter(pk=input["id"]).update(email=email, username=username, password=password)
             return super().mutate_and_get_payload(root, info, **input)
         else:
-            username=input["username"]
-            password=input["password"]
-            email=input["email"]
             crypt_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-            if "imageProfile" in input:
-                image_profile=input["imageProfile"]
-                User.objects.create(email=email, username=username, password=crypt_password,
-                                    image_profile=image_profile)
+            if "profile_image" in input:
+                file=cls.convert_file_payload_to_file_data(input)
+                User.objects.create(email=email, username=username, password=crypt_password,profile_image=file)
             else:
                 User.objects.create(email=email, username=username, password=crypt_password)
             return super().mutate_and_get_payload(root, info, **input)
