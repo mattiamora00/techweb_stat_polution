@@ -13,8 +13,3 @@ class City(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-
-    def save(self):
-        if self.male_percentage + self.female_percentage != 100:
-            return
-        return super().save(self)

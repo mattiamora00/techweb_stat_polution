@@ -9,7 +9,7 @@ class Illness(models.Model):
     def __str__(self):
         return f"{self.nome}"
 
-    def save(self):
+    def save(self,*args, **kwargs):
         if self.average_duration_days <= 0:
             return
         super().save(self)
