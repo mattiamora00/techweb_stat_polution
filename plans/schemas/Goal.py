@@ -27,6 +27,7 @@ class GoalMutation(DjangoFormMutation):
 class Query(graphene.ObjectType):
     goals = graphene.List(GoalType,id=graphene.ID(),current_quantity=graphene.Float(),goal_threshold=graphene.Float())
     goal = graphene.Field(GoalType, id=graphene.Int())
+    last_city_goal = graphene.Field(GoalType, city=graphene.String(), pollutant=graphene.String())
 
     @staticmethod
     def resolve_goals(self, info, **kwargs):
@@ -38,6 +39,13 @@ class Query(graphene.ObjectType):
 
     def resolve_goal(self, info, id):
         return Goal.objects.get(pk=id)
+
+    def resolve_last_city_goal(self, info, **kwargs):
+        city=kwargs["city"]
+        pollutant=kwargs["pollutant"]
+        result = Goal.objects.filter(plan__city__name=city,pollutant__name=pollutant).order_by("plan__end_date")
+        return result.last()
+
 
 
 class DeleteGoal(CustomDeleteMutation):

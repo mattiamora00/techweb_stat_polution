@@ -52,23 +52,25 @@ class UserMutation(DjangoModelFormMutation):
         username = input["username"]
         password = input["password"]
         email = input["email"]
+        name = input["name"]
+        surname = input["surname"]
         if "id" in input:
             if "profile_image" in input:
                 file = cls.convert_file_payload_to_file_data(input)
                 user=User.objects.filter(pk=input["id"])[0]
                 user.profile_image=file
                 user.save()
-                User.objects.filter(pk=input["id"]).update(email=email, username=username, password=password)
+                User.objects.filter(pk=input["id"]).update(email=email, username=username, password=password,name=name,surname=surname)
             else:
-                User.objects.filter(pk=input["id"]).update(email=email, username=username, password=password)
+                User.objects.filter(pk=input["id"]).update(email=email, username=username, password=password,name=name,surname=surname)
             return super().mutate_and_get_payload(root, info, **input)
         else:
             crypt_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
             if "profile_image" in input:
                 file=cls.convert_file_payload_to_file_data(input)
-                User.objects.create(email=email, username=username, password=crypt_password,profile_image=file)
+                User.objects.create(email=email, username=username, password=crypt_password,profile_image=file,name=name,surname=surname)
             else:
-                User.objects.create(email=email, username=username, password=crypt_password)
+                User.objects.create(email=email, username=username, password=crypt_password,name=name,surname=surname)
             return super().mutate_and_get_payload(root, info, **input)
 
 

@@ -12,9 +12,10 @@ class User(models.Model):
     view_graph=models.BooleanField(default=True)
     view_sick=models.BooleanField(default=False)
     profile_image = models.ImageField(upload_to ='profile_image/',blank=True,null=True)
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=30)
 
     def save(self,*args,**kwargs):
-
         if len(self.password)<64 :
             self.password=hashlib.sha256(self.password.encode('utf-8')).hexdigest()
         super().save()
