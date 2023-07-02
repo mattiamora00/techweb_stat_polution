@@ -1,13 +1,13 @@
 import React from "react";
 import { AppBar,Toolbar,Typography } from '@mui/material';
 import {Box} from "grommet";
-import MapComponent from "./MapComp"
-import { ApolloProvider,ApolloClient,InMemoryCache,HttpLink} from '@apollo/client';
+import MapComponent from "../map/MapComp"
+import { ApolloProvider} from '@apollo/client';
 import { useLocation } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
-import {SESSION} from "./LoginGQL";
-import { URL_MEDIA_ROOT ,readDataSession,checkToken} from "./global";
-import AvatarComponent from "./AvatarComponent";
+import {SESSION} from "../login/LoginGQL";
+import { readDataSession,checkToken} from "../global";
+import AvatarComponent from "../AvatarComponent";
 
 function HomeComp() {
 
@@ -38,7 +38,7 @@ function HomeComp() {
               Pollution Stats
             </Typography>     
             {
-              imageProfile &&  
+              imageProfile && userData.email!=="anonymous@example.com" &&  
                 <AvatarComponent imageProfile={imageProfile}/>
             }
           </Toolbar>

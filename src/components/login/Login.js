@@ -1,17 +1,15 @@
 import React from "react";
 import { AppBar,Toolbar,Typography } from '@mui/material';
 import {Box,Card,Text} from "grommet";
-import MapComponent from "./MapComp"
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import LoginIcon from '@mui/icons-material/Login';
 import { useHistory } from "react-router-dom";
-import { ApolloProvider,ApolloClient,InMemoryCache,HttpLink} from '@apollo/client';
-import {USER_AUTH,SESSION} from "./LoginGQL";
+import {USER_AUTH} from "./LoginGQL";
 import { useLazyQuery } from "@apollo/client";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import RegisterUser from "./RegisterUser";
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 function Login(props) {
     
@@ -53,6 +51,11 @@ function Login(props) {
 
     function login(){
         queryLogin({variables:loginData})
+    }
+
+    function anonymousLogin(){
+        alert("Accedendo in questa modalità, non sarai in grado di richiedere agli amministratori di assegnarti ulteriori permessi.\n Potrai solo visionare i grafici delle rilevazioni delle varie città")
+        queryLogin({variables:{username:"anonymous",password:"password"}})
     }
 
     function goToReisterUser(){
@@ -99,6 +102,9 @@ function Login(props) {
                     </Button>
                     <Button color="success" variant="contained" endIcon={<AssignmentIndIcon />} onClick={goToReisterUser}>
                         Registrati
+                    </Button>
+                    <Button color="warning" variant="contained" endIcon={<NoAccountsIcon />} onClick={anonymousLogin}>
+                        Accesso anonimo
                     </Button>
                     {
                         loginError && <Text weight="bold" color="red">{loginError}</Text>

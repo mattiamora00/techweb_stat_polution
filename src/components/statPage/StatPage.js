@@ -8,17 +8,15 @@ import TabellaPiani from "./TabellaPiani";
 import {Card } from '@mui/material';
 import { useLazyQuery } from "@apollo/client";
 import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
-import LoadingLayer from "./LoadingLayer";
-import {SESSION} from "./LoginGQL";
-import { useHistory } from "react-router-dom";
-import AvatarComponent from "./AvatarComponent";
-import { URL_MEDIA_ROOT ,readDataSession,checkToken} from "./global";
+import LoadingLayer from "../LoadingLayer";
+import {SESSION} from "../login/LoginGQL";
+import AvatarComponent from "../AvatarComponent";
+import { readDataSession,checkToken} from "../global";
 
 
 function StatPageComp(props) {
 
   const location = useLocation();
-  const history=useHistory();
   const [elencoAgentiInq,setElencoAgentiInq]=React.useState([]);
   const [mapRil,setMapRil]=React.useState(new Map());
   const [elencoMalattie,setElencoMalattia]=React.useState([]);
@@ -110,7 +108,7 @@ function StatPageComp(props) {
               Statistiche {location.city}
             </Typography>
            {
-            imageProfile &&  
+            imageProfile && userData.email!=="anonymous@example.com" && 
               <AvatarComponent imageProfile={imageProfile}/>
            }
            

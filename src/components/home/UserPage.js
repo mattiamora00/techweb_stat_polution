@@ -1,23 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AppBar,Toolbar,Typography} from '@mui/material';
 import { Box,FileInput } from "grommet";
-import { useLocation } from "react-router-dom";
 import { useLazyQuery ,useMutation} from "@apollo/client";
-import {SESSION} from "./LoginGQL";
-import { useHistory } from "react-router-dom";
+import {SESSION} from "../login/LoginGQL";
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Update,Logout } from "@mui/icons-material";
-import { URL_MEDIA_ROOT ,readDataSession,checkToken} from "./global";
+import { readDataSession,checkToken} from "../global";
 import Avatar from '@mui/material/Avatar';
-import LoadingLayer from "./LoadingLayer";
-import {UPDATE_USER} from "./UserPageGQL";
+import LoadingLayer from "../LoadingLayer";
+import {UPDATE_USER} from "../home/UserPageGQL";
 
 
 function UserProfilePage(props) {
 
-  const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
   const [userData,setUserData]=React.useState({});
   const [imageProfile,setImageProfile]=React.useState();
   const [file,setFile]=React.useState();
@@ -35,22 +32,6 @@ function UserProfilePage(props) {
      checkToken(querySession)
   },[])
 
-  useEffect(()=>{
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  },[])
-
-  function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-      width,
-      height
-    };
-  }
   
   const onChangeTextInput=(event)=>{
     setUserData({...userData,[event.target.name]:event.target.value})

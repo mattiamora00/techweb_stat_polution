@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Map, Marker } from "pigeon-maps"
-import LayerSensoreComp from "./LayerSensore";
+import LayerSensoreComp from "../sensor/LayerSensore";
 import {Box} from "grommet";
 import Fab from '@mui/material/Fab';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useLazyQuery } from "@apollo/client";
 import { QUERY_GET_SENSORS,QUERY_GET_CITIES } from "./MapCompGQL";
-import LoadingLayer from "./LoadingLayer";
-import AvatarComponent from "./AvatarComponent";
+import LoadingLayer from "../LoadingLayer";
 
 const MapComponent= (props) => {
 

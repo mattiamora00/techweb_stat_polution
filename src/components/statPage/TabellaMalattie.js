@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import React from 'react';
 import Paper from '@mui/material/Paper';
-import {Card,CardContent,Divider } from '@mui/material';
+import {Card} from '@mui/material';
 import LayerCause from './LayerCause';
 
 function TabellaMalattie(props){

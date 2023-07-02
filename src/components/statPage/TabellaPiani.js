@@ -20,7 +20,7 @@ function TabellaPiani(props){
           <Layer onEsc={()=>setShowLayerDescrizione(false)} onClickOutside={()=>setShowLayerDescrizione(false)}>
             <Box pad="small" gap="small" width="40vw" height="40vh">
                 <TextArea readOnly={true} resize={false} fill >
-                  {descrizionePianoSel!=""?descrizionePianoSel:"NESSUNA DESCRIZIONE INSERITA PER QUESTO PIANO"}
+                  {descrizionePianoSel!==""?descrizionePianoSel:"NESSUNA DESCRIZIONE INSERITA PER QUESTO PIANO"}
                 </TextArea>
               <Button color="primary" style={{height:"40px"}}   variant="contained" onClick={()=>{setShowLayerDescrizione(false)}}>Chiudi</Button>
             </Box>

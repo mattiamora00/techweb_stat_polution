@@ -1,44 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AppBar,Toolbar,Typography} from '@mui/material';
 import { Box,FileInput } from "grommet";
-import { useLocation } from "react-router-dom";
-import { useLazyQuery ,useMutation} from "@apollo/client";
-import {SESSION} from "./LoginGQL";
-import { useHistory } from "react-router-dom";
+import { useMutation} from "@apollo/client";
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Update,Logout, Login } from "@mui/icons-material";
-import { URL_MEDIA_ROOT ,readDataSession,checkToken} from "./global";
+import { Login } from "@mui/icons-material";
 import Avatar from '@mui/material/Avatar';
-import LoadingLayer from "./LoadingLayer";
-import {UPDATE_USER} from "./UserPageGQL";
+import {UPDATE_USER} from "../home/UserPageGQL";
 
 function RegisterUser(props) {
 
-  const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
   const [userData,setUserData]=React.useState({});
-  const [imageProfile,setImageProfile]=React.useState();
+  const [imageProfile,]=React.useState();
   const [file,setFile]=React.useState();
   const [passwordConfirm,setPasswordConfirm]=React.useState("");
   const [ mutationRegisterUser] = useMutation(UPDATE_USER)
-
-  useEffect(()=>{
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    },[])
-
-  function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-      width,
-      height
-    };
-  }
   
   function validateEmail(mail) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){

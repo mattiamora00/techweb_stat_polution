@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { Button } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
-import { SENSOR_RILEVATIONS } from "./LayerSensorGQL";
-import LoadingLayer from "./LoadingLayer";
+import { SENSOR_RILEVATIONS } from "../sensor/LayerSensorGQL";
+import LoadingLayer from "../LoadingLayer";
 import moment from "moment";
 import { LAST_GOAL_POLLUTANT_CITY } from "./LayerSensorGQL";
 

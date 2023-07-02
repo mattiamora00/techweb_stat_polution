@@ -1,9 +1,8 @@
 import React from "react";
 import { Layer,Box,Table,TableHeader,TableRow,TableCell,TableBody ,Text} from "grommet";
-import { useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { CAUSE_OF_ILLNESS } from "./StatPageGQL";
-import LoadingLayer from "./LoadingLayer";
+import LoadingLayer from "../LoadingLayer";
 
 const LayerCause=(props)=>{
 

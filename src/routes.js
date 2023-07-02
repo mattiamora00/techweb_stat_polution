@@ -1,9 +1,9 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import StatPageComp from './components/StatPage';
-import HomeComp from './components/Home';
-import Login from './components/Login';
-import UserProfilePage from './components/UserPage';
-import RegisterUser from './components/RegisterUser';
+import StatPageComp from './components/statPage/StatPage';
+import HomeComp from './components/home/Home';
+import Login from './components/login/Login';
+import UserProfilePage from './components/home/UserPage';
+import RegisterUser from './components/login/RegisterUser';
 
 const Routes = (props) => (
     <BrowserRouter>
