@@ -9,7 +9,7 @@ from users.models.User import User
 import json
 from graphene_django.utils.testing import GraphQLTestCase
 
-class MyTestCase(GraphQLTestCase):
+class Sensors(GraphQLTestCase):
     GRAPHQL_URL = "/graphql/"
 
     def setUp(self):

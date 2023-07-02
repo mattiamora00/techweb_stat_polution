@@ -6,7 +6,7 @@ from graphene_django.utils.testing import GraphQLTestCase
 from geo.models.State import State
 
 
-class MyTestCase(GraphQLTestCase):
+class Plans(GraphQLTestCase):
     GRAPHQL_URL = "/graphql/"
 
     def setUp(self):

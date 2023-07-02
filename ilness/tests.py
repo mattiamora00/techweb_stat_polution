@@ -6,10 +6,8 @@ from graphene_django.utils.testing import GraphQLTestCase
 from geo.models.State import State
 
 
-class MyTestCase(GraphQLTestCase):
+class Ilness(GraphQLTestCase):
     GRAPHQL_URL = "/graphql/"
-
-    #def test_sensor_insert(self):
 
     def setUp(self):
         self.state = State.objects.create(name="Italia", iso_code="IT")

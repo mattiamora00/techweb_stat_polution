@@ -1,16 +1,19 @@
 from django.test import TestCase
 import json
 from graphene_django.utils.testing import GraphQLTestCase
+
+from .models.City import City
 from .models.State import State
 
-class MyTestCase(GraphQLTestCase):
+
+class GeoTest(GraphQLTestCase):
     GRAPHQL_URL = "/graphql/"
 
-    #def test_sensor_insert(self):
-    def test_states_query(self):
-        new_state = State(iso_code='IT', name='Italy')
-        new_state.save()
+    def setUp(self):
+        self.state = State.objects.create(name="Italia", iso_code="IT")
+        self.city = City.objects.create(name="Milano",lat=45.4613,lng=9.1595,state=self.state)
 
+    def test_states_query(self):
         response = self.query(
             '''
             query {
@@ -27,9 +30,6 @@ class MyTestCase(GraphQLTestCase):
         self.assertResponseNoErrors(response)
 
     def test_city_query(self):
-        new_state = State(name='Milano')
-        new_state.save()
-
         response = self.query(
             '''
             query cities {
