@@ -6,9 +6,9 @@ import hashlib
 class User(models.Model):
     username=models.CharField(max_length=30,unique=True)
     email=models.EmailField()
-    password=models.CharField(max_length=64,validators=[MinLengthValidator(64)])
+    password=models.CharField(max_length=64)
     view_sensor=models.BooleanField(default=False)
-    view_plan=models.BooleanField(default=False)
+    view_plan=models.BooleanField(default=True)
     view_graph=models.BooleanField(default=True)
     view_sick=models.BooleanField(default=False)
     profile_image = models.ImageField(upload_to ='profile_image/',blank=True,null=True)
