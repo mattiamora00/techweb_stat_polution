@@ -29,8 +29,8 @@ function RegisterUser(props) {
     }
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  },[])
+      return () => window.removeEventListener('resize', handleResize);
+    },[])
 
   function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
@@ -40,6 +40,14 @@ function RegisterUser(props) {
     };
   }
   
+  function validateEmail(mail) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+      return true
+    }
+    return false
+  }
+
+
   const onChangeTextInput=(event)=>{
     setUserData({...userData,[event.target.name]:event.target.value})
   }
@@ -50,21 +58,24 @@ function RegisterUser(props) {
       delete userDataApp.imageProfile
       userDataApp["imageProfile"]=JSON.stringify(file)
     }
-    console.log(userDataApp);
     if(userDataApp.password===passwordConfirm){
-      mutationRegisterUser({variables:userDataApp})
-      .then((value)=>{
-        alert("Operazione avvenuta con successo"); 
-        window.location.href = window.location.origin + "/";
-      })
-      .catch((error)=>{
-        console.log(error.message);
-        if(error.message.toString().includes("duplicate key value violates unique constraint")){
-          alert("Username già esistente, prova con un altro");
-        }else{
-          alert("Errore durante l'operazione");
-        }
-      })
+      if(validateEmail(userDataApp.email)){
+        mutationRegisterUser({variables:userDataApp})
+        .then((value)=>{
+          alert("Operazione avvenuta con successo"); 
+          window.location.href = window.location.origin + "/";
+        })
+        .catch((error)=>{
+          console.log(error.message);
+          if(error.message.toString().includes("duplicate key value violates unique constraint")){
+            alert("Username già esistente, prova con un altro");
+          }else{
+            alert("Errore durante l'operazione");
+          }
+        })
+      }else{
+        alert("Email non valida")
+      }
     }else{
       alert("PASSWORD NON UGUALI")
     }
@@ -87,6 +98,22 @@ function RegisterUser(props) {
                     placeholder="Username" 
                     name="username"
                     value={userData && userData.username}
+                    onChange={onChangeTextInput}
+                />  
+              </FormControl>
+              <FormControl sx={{ width: '50ch' }}>
+              <TextField
+                    placeholder="Nome" 
+                    name="name"
+                    value={userData && userData.name}
+                    onChange={onChangeTextInput}
+                />  
+              </FormControl>
+              <FormControl sx={{ width: '50ch' }}>
+              <TextField
+                    placeholder="Cognome" 
+                    name="surname"
+                    value={userData && userData.surname}
                     onChange={onChangeTextInput}
                 />  
               </FormControl>

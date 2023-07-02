@@ -36,7 +36,6 @@ function StatPageComp(props) {
   });
 
   React.useEffect(()=>{
-    console.log(userData);
   }, [userData])
 
   React.useEffect(()=>{

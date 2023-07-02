@@ -19,7 +19,6 @@ const LayerCause=(props)=>{
             setNomeMalattia(data.ilnes.nome);
         }
         if(causeList){
-            console.log(causeList);
             setElencoCause(causeList);
         }
       },

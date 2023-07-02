@@ -69,7 +69,6 @@ function UserProfilePage(props) {
     if(file){
       userDataApp["imageProfile"]=JSON.stringify(file)
     }
-    console.log(userDataApp);
     if(validateEmail(userDataApp.email)){
       mutationUpdateUser({variables:userDataApp})
       .then((value)=>{
@@ -104,6 +103,22 @@ function UserProfilePage(props) {
         </AppBar>
         <Box  direction={"column"} overflow="auto" pad="small" align="center" gap="small">
               <Avatar sx={{ height: '100px', width: '100px' }} align="center" src={imageProfile}/>
+              <FormControl sx={{ width: '50ch' }}>
+              <TextField
+                    placeholder="Nome" 
+                    name="name"
+                    value={userData && userData.name}
+                    onChange={onChangeTextInput}
+                />  
+              </FormControl>
+              <FormControl sx={{ width: '50ch' }}>
+              <TextField
+                    placeholder="Cognome" 
+                    name="surname"
+                    value={userData && userData.surname}
+                    onChange={onChangeTextInput}
+                />  
+              </FormControl>
               <FormControl sx={{ width: '50ch' }}>
                 <TextField
                     placeholder="Email" 

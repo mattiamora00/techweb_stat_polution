@@ -17,4 +17,13 @@ query SensorRilevations($sensorCode:String!){
 }
 `
 
-export {SENSOR_RILEVATIONS};
+const LAST_GOAL_POLLUTANT_CITY=gql`
+query PlanCity($city:String!,$pollutant:String!){
+  lastCityGoal(city:$city,pollutant:$pollutant){
+    id
+    goalThreshold
+  }
+}
+`
+
+export {SENSOR_RILEVATIONS,LAST_GOAL_POLLUTANT_CITY};

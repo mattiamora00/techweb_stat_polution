@@ -7,12 +7,13 @@ import { useLazyQuery } from "@apollo/client";
 import { SENSOR_RILEVATIONS } from "./LayerSensorGQL";
 import LoadingLayer from "./LoadingLayer";
 import moment from "moment";
+import { LAST_GOAL_POLLUTANT_CITY } from "./LayerSensorGQL";
 
 const LayerSensoreComp=(props)=>{
 
     let history = useHistory();
     const [elencoRilevazioni,setElencoRilevazioni]=React.useState([]);
-    const [sogliaObiettivo,setSogliaObiettivo]=React.useState("");
+    const [sogliaObiettivo,setSogliaObiettivo]=React.useState(null);
 
     const [ queryGetSensorRilevation,{loading}
     ] = useLazyQuery(SENSOR_RILEVATIONS, { //
@@ -23,9 +24,25 @@ const LayerSensoreComp=(props)=>{
       notifyOnNetworkStatusChange: true, // did the work
     });
 
+    const [ queryGetLastCityGoal
+    ] = useLazyQuery(LAST_GOAL_POLLUTANT_CITY, { //
+      fetchPolicy: "no-cache",
+      onCompleted: (data) => { 
+        const lastCityGoal=data.lastCityGoal;
+        if(lastCityGoal){
+            setSogliaObiettivo(lastCityGoal.goalThreshold)
+        }else{
+            setSogliaObiettivo(null)
+        }
+      },
+      notifyOnNetworkStatusChange: true, // did the work
+    });
+
+
     useEffect(()=>{
         if(props.sensore.id){
             queryGetSensorRilevation({variables:{sensorCode:props.sensore.sensorCode}})
+            queryGetLastCityGoal({variables:{city:props.sensore.city.name,pollutant:props.sensore.pollutant.name}})
         }
     },[])
 
@@ -58,16 +75,16 @@ const LayerSensoreComp=(props)=>{
                                 return(
                                     <TableRow>
                                     <TableCell scope="row">
-                                        <strong><Text color={sogliaObiettivo!==""?(rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green"):"black"}>{moment(rilevazione.timestamp).format("DD-MM-YYYY")}</Text></strong>
+                                        <strong><Text color={sogliaObiettivo?(rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green"):"black"}>{moment(rilevazione.timestamp).format("DD-MM-YYYY")}</Text></strong>
                                     </TableCell>
                                     <TableCell scope="row">
-                                        <strong><Text color={sogliaObiettivo!==""?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{moment(rilevazione.timestamp).format("hh:mm")}</Text></strong>
+                                        <strong><Text color={sogliaObiettivo?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{moment(rilevazione.timestamp).format("hh:mm")}</Text></strong>
                                     </TableCell>
                                     <TableCell>
-                                        <Text color={sogliaObiettivo!==""?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{props.sensore.pollutant.name}</Text>
+                                        <Text color={sogliaObiettivo?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{props.sensore.pollutant.name}</Text>
                                     </TableCell>
                                     <TableCell>
-                                        <Text color={sogliaObiettivo!==""?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{rilevazione.quantity}</Text>
+                                        <Text color={sogliaObiettivo?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{rilevazione.quantity}</Text>
                                     </TableCell>
                                     </TableRow> 
                                 )

@@ -40,6 +40,7 @@ function Login(props) {
       onError:(error)=>{
         if(error.message==="User matching query does not exist."){
             alert("Errors, user not found")
+            setLoginError("Errors, user not found");
         }
        
       },

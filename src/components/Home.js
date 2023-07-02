@@ -20,7 +20,6 @@ function HomeComp() {
   ] = useLazyQuery(SESSION, { //
     fetchPolicy: "no-cache",
     onCompleted: (data) => { 
-      console.log(data)
       readDataSession(data,setImageProfile,setUserData)
     },
     notifyOnNetworkStatusChange: true, // did the work
