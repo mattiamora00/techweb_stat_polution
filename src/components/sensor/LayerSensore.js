@@ -31,6 +31,7 @@ const LayerSensoreComp=(props)=>{
         const lastCityGoal=data.lastCityGoal;
         if(lastCityGoal){
             setSogliaObiettivo(lastCityGoal.goalThreshold)
+            console.log(lastCityGoal.goalThreshold);
         }else{
             setSogliaObiettivo(null)
         }
@@ -72,19 +73,20 @@ const LayerSensoreComp=(props)=>{
                         <TableBody>
                             {
                                 elencoRilevazioni.map((rilevazione)=>{
+                                    console.log(rilevazione);
                                 return(
                                     <TableRow>
                                     <TableCell scope="row">
-                                        <strong><Text color={sogliaObiettivo?(rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green"):"black"}>{moment(rilevazione.timestamp).format("DD-MM-YYYY")}</Text></strong>
+                                        <strong><Text color={sogliaObiettivo?(rilevazione.quantity>sogliaObiettivo?"red":"green"):"black"}>{moment(rilevazione.timestamp).format("DD-MM-YYYY")}</Text></strong>
                                     </TableCell>
                                     <TableCell scope="row">
-                                        <strong><Text color={sogliaObiettivo?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{moment(rilevazione.timestamp).format("hh:mm")}</Text></strong>
+                                        <strong><Text color={sogliaObiettivo?rilevazione.quantity>sogliaObiettivo?"red":"green":"black"}>{moment(rilevazione.timestamp).format("hh:mm")}</Text></strong>
                                     </TableCell>
                                     <TableCell>
-                                        <Text color={sogliaObiettivo?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{props.sensore.pollutant.name}</Text>
+                                        <Text color={sogliaObiettivo?rilevazione.quantity>sogliaObiettivo?"red":"green":"black"}>{props.sensore.pollutant.name}</Text>
                                     </TableCell>
                                     <TableCell>
-                                        <Text color={sogliaObiettivo?rilevazione.quantita_rilevata>sogliaObiettivo?"red":"green":"black"}>{rilevazione.quantity}</Text>
+                                        <Text color={sogliaObiettivo?rilevazione.quantity>sogliaObiettivo?"red":"green":"black"}>{rilevazione.quantity}</Text>
                                     </TableCell>
                                     </TableRow> 
                                 )
