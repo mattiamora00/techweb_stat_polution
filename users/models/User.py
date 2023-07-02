@@ -22,3 +22,12 @@ class User(models.Model):
 
     def __str__(self):
         return f"{self.username} {self.email}"
+
+    @classmethod
+    def get_anonymous_user(cls):
+        username = 'anonymous'
+        try:
+            user = cls.objects.get(username=username)
+        except cls.DoesNotExist:
+            user = cls(username=username)
+        return user

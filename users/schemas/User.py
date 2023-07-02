@@ -91,19 +91,27 @@ class Query(graphene.ObjectType):
         return User.objects.get(pk=id)
 
     def resolve_user_auth(self, info, username, password):
-        user = User.objects.get(username=username)
-        if user is not None:
-            hash_pw = hashlib.sha256(password.encode('utf-8')).hexdigest()
-            if user.password==hash_pw:
-                letters = string.ascii_lowercase
-                token = ''.join(random.choice(letters) for i in range(30))
-                new_session = Session(token=hashlib.sha256(token.encode('utf-8')).hexdigest(), user_id_id=user.id)
-                new_session.save()
-                return json.dumps({"success": True, "token": token})
-            else:
-                return json.dumps({"success": False, "error": "Error: wrong password"})
+        if username == 'anonymous':
+            user = User.get_anonymous_user()
+            letters = string.ascii_lowercase
+            token = ''.join(random.choice(letters) for i in range(30))
+            new_session = Session(token=hashlib.sha256(token.encode('utf-8')).hexdigest(), user_id_id=user.id)
+            new_session.save()
+            return json.dumps({"success": True, "token": token})
         else:
-            return json.dumps({"success": False, "error": "Error: user not found"})
+            user = User.objects.get(username=username)
+            if user is not None:
+                hash_pw = hashlib.sha256(password.encode('utf-8')).hexdigest()
+                if user.password==hash_pw:
+                    letters = string.ascii_lowercase
+                    token = ''.join(random.choice(letters) for i in range(30))
+                    new_session = Session(token=hashlib.sha256(token.encode('utf-8')).hexdigest(), user_id_id=user.id)
+                    new_session.save()
+                    return json.dumps({"success": True, "token": token})
+                else:
+                    return json.dumps({"success": False, "error": "Error: wrong password"})
+            else:
+                return json.dumps({"success": False, "error": "Error: user not found"})
 
 class DeleteUser(CustomDeleteMutation):
     class Meta:
