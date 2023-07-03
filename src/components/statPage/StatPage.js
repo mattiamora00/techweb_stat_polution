@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { AppBar,Toolbar,Typography} from '@mui/material';
 import { Box,Text } from "grommet";
 import { useLocation } from "react-router-dom";
 import LineChartComp from "./LineChar";
@@ -10,13 +9,14 @@ import { useLazyQuery } from "@apollo/client";
 import { POLLUTANT_OF_CITY ,ILLNESS_OF_CITY, PLANS_OF_CITY} from "./StatPageGQL";
 import LoadingLayer from "../LoadingLayer";
 import {SESSION} from "../login/LoginGQL";
-import AvatarComponent from "../AvatarComponent";
 import { readDataSession,checkToken} from "../global";
-
+import AppBarApp from "../AppBar";
+import { useHistory } from "react-router-dom";
 
 function StatPageComp(props) {
 
   const location = useLocation();
+  const history = useHistory();
   const [elencoAgentiInq,setElencoAgentiInq]=React.useState([]);
   const [mapRil,setMapRil]=React.useState(new Map());
   const [elencoMalattie,setElencoMalattia]=React.useState([]);
@@ -102,18 +102,7 @@ function StatPageComp(props) {
 
   return (
       <Box>
-        <AppBar position="static">
-          <Toolbar variant="dense" sx={{ justifyContent: "space-between" }}>
-            <Typography variant="h6" color="inherit" component="div">
-              Statistiche {location.city}
-            </Typography>
-           {
-            imageProfile && userData.email!=="anonymous@example.com" && 
-              <AvatarComponent imageProfile={imageProfile}/>
-           }
-           
-          </Toolbar>
-        </AppBar>
+        <AppBarApp goBack={()=>history.goBack()} title={`Statistiche ${location.city}`} imageProfile={imageProfile}  anonymous={userData.email==="anonymous@example.com"}/>
         <Box  direction={windowDimensions.width<=1200?"column":"row"} overflow="auto" pad="small">
           <Box height="100%" width="100%"  gap="small" direction="column" overflow="auto" pad="small">
             <Box margin="7px">

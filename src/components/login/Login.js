@@ -1,5 +1,4 @@
 import React from "react";
-import { AppBar,Toolbar,Typography } from '@mui/material';
 import {Box,Card,Text} from "grommet";
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -10,6 +9,7 @@ import {USER_AUTH} from "./LoginGQL";
 import { useLazyQuery } from "@apollo/client";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
+import AppBarApp from "../AppBar";
 
 function Login(props) {
     
@@ -70,13 +70,7 @@ function Login(props) {
 
     return (
     <Box height="100vh" background="#e8ecfc ">
-        <AppBar position="static">
-        <Toolbar variant="dense">
-            <Typography variant="h6" color="inherit" component="div">
-                Pollution Stats Login
-            </Typography>
-        </Toolbar>
-        </AppBar>
+        <AppBarApp goBack={null} title="Pollution Stats Login" imageProfile={null} />
         <Box margin="large" gap="medium" align="center">
             <Card elevation="medium" background="white">
                 <Box gap="medium" pad="medium">

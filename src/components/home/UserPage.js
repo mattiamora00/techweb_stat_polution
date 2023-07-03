@@ -1,5 +1,4 @@
 import React from "react";
-import { AppBar,Toolbar,Typography} from '@mui/material';
 import { Box,FileInput } from "grommet";
 import { useLazyQuery ,useMutation} from "@apollo/client";
 import {SESSION} from "../login/LoginGQL";
@@ -11,10 +10,12 @@ import { readDataSession,checkToken} from "../global";
 import Avatar from '@mui/material/Avatar';
 import LoadingLayer from "../LoadingLayer";
 import {UPDATE_USER} from "../home/UserPageGQL";
-
+import AppBarApp from "../AppBar";
+import { useHistory } from "react-router-dom";
 
 function UserProfilePage(props) {
 
+  const history=useHistory();
   const [userData,setUserData]=React.useState({});
   const [imageProfile,setImageProfile]=React.useState();
   const [file,setFile]=React.useState();
@@ -75,14 +76,10 @@ function UserProfilePage(props) {
 
   return (
       <Box>
-        <AppBar position="static">
-          <Toolbar variant="dense" sx={{ justifyContent: "space-between" }}>
-            <Typography variant="h6" color="inherit" component="div">
-              Pagina Utente
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Box  direction={"column"} overflow="auto" pad="small" align="center" gap="small">
+        <AppBarApp goBack={()=>history.push({
+            pathname: '/home',
+        })} title=" Pagina Utente" imageProfile={null} />
+         <Box  direction={"column"} overflow="auto" pad="small" align="center" gap="small">
               <Avatar sx={{ height: '100px', width: '100px' }} align="center" src={imageProfile}/>
               <FormControl sx={{ width: '50ch' }}>
               <TextField

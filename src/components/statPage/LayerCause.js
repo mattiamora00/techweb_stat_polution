@@ -37,15 +37,12 @@ const LayerCause=(props)=>{
                 <Table>
                     <TableHeader>
                         <TableRow>
-                        <TableCell>
-                            Tipologia inquinamento
-                        </TableCell>
-                        <TableCell>
-                            Agente inquinante
-                        </TableCell>
-                        <TableCell>
-                            Descrizione agente inquinante
-                        </TableCell>
+                            <TableCell>
+                                Agente inquinante
+                            </TableCell>
+                            <TableCell>
+                                Descrizione agente inquinante
+                            </TableCell>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -53,9 +50,6 @@ const LayerCause=(props)=>{
                            elencoCause.map((causa)=>{
                             return(
                                 <TableRow>
-                                    <TableCell scope="row">
-                                        {""}
-                                    </TableCell>
                                     <TableCell scope="row">
                                         {causa.node.name}
                                     </TableCell>
